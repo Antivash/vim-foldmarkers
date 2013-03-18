@@ -1,23 +1,12 @@
-function! MarkdownLevel()
-if getline(v:lnum) =~ '^" .*$'
- return ">1"
+function! MarkdownFolds()
+  let thisline = getline(v:lnum)
+  if match(thisline, '^"') >= 0
+    return ">1"
+  elseif match(thisline, '^""') >= 0
+    return ">2"
+  else
+    return "="
   endif
-if getline(v:lnum) =~ '^"" .*$'
- return ">2"
-  endif
-if getline(v:lnum) =~ '^""" .*$'
- return ">3"
-  endif
-if getline(v:lnum) =~ '^"""" .*$'
- return ">4"
-  endif
-if getline(v:lnum) =~ '^""""" .*$'
- return ">5"
-  endif
-if getline(v:lnum) =~ '^"""""" .*$'
- return ">6"
-  endif
-return "=" 
- endfunction
-au BufEnter *.vim setlocal foldexpr=MarkdownLevel()  
+endfunction
 au BufEnter *.vim setlocal foldmethod=expr
+au BufEnter *.vim setlocal foldexpr=MarkdownFolds()
